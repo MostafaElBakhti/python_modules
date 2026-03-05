@@ -26,10 +26,27 @@ def test_ft_exercise(exercise_file_name):
     """
     print(f"\n=== Testing {exercise_file_name} ===")
 
+    # Map exercise names to their subdirectories
+    exercise_dirs = {
+        "ft_hello_garden": "ex0",
+        "ft_plot_area": "ex1",
+        "ft_harvest_total": "ex2",
+        "ft_plant_age": "ex3",
+        "ft_water_reminder": "ex4",
+        "ft_count_harvest_iterative": "ex5",
+        "ft_count_harvest_recursive": "ex5",
+        "ft_garden_summary": "ex6",
+        "ft_seed_inventory": "ex7",
+    }
+
     try:
-        # Import your exercise file
-        # This is like doing: import ft_plot_area
-        ft_module = __import__(exercise_file_name)
+        # Import your exercise file from its subdirectory
+        # This is like doing: from ex1 import ft_plot_area
+        subdir = exercise_dirs.get(exercise_file_name, "")
+        if subdir:
+            ft_module = __import__(f"{subdir}.{exercise_file_name}", fromlist=[exercise_file_name])
+        else:
+            ft_module = __import__(exercise_file_name)
 
         # Get the function from your file
         # This is like doing: ft_plot_area.ft_plot_area
