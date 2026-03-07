@@ -18,4 +18,18 @@ class FloweringPlant(Plant):
 
 class PrizeFlower(FloatingPointError):
     def __init__(self, name: str, height: int, color: str, points : int):
-        super().__init__()
+        super().__init__(name,height,color)
+        self.points: int = points
+
+class GardenManager:
+    def __init__(self,owner:str):
+        self.owner: str = owner
+        self.plants: list[Plant] = []
+
+if __name__ == "__main__":
+    tree : Plant = Plant("Oak", 500)
+    flower : FloweringPlant = FloweringPlant("Rose", 25, "red")
+    prize_flower : PrizeFlower = PrizeFlower("Sunflower", 30, "yellow", 10)
+    tree.grow()
+    flower.grow()
+    # prize_flower.grow()
