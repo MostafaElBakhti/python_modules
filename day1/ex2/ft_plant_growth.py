@@ -30,5 +30,5 @@ if __name__ == "__main__":
     print("=== Day 7 ===")
     plant.get_info()
     plant2.get_info()
-    print(f"Growth this week: +{plant.height - grow1}cm")
-    print(f"Growth this week: +{plant2.height - grow2}cm")
+    plant_grow: int = plant.height - grow1 + plant2.height - grow2
+    print(f"Growth this week: +{plant_grow}cm")

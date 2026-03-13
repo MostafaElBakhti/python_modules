@@ -15,9 +15,9 @@ class Flower(Plant):
 
 class Tree(Plant):
     def __init__(self, name: str, height: int,
-                  age: int, trunk_diameter: str) -> None:
+                  age: int, trunk_diameter: int) -> None:
         super().__init__(name, height, age)
-        self.trunk_diameter: str = trunk_diameter
+        self.trunk_diameter: int = trunk_diameter
 
     def produce_shade(self) -> None:
         print(f"{self.name} provides {self.height * 3} square meters of shade")
@@ -33,8 +33,8 @@ class Vegetable(Plant):
 if __name__ == "__main__":
     flower : Flower = Flower("Rose",25,30,"red")
     flower2 : Flower = Flower("Lily",30,45,"white")
-    tree : Tree = Tree("Oak",500,1825,"50")
-    tree2 : Tree = Tree("Maple",300,1095,"30")
+    tree : Tree = Tree("Oak",500,1825,50)
+    tree2 : Tree = Tree("Maple",300,1095,30)
     vegetable : Vegetable = Vegetable("Tomato",80,90,"summer","C")
     vegetable2 : Vegetable = Vegetable("Carrot",40,60,"fall","A")
     print("=== Garden Plant Types ===\n")
