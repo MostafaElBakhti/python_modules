@@ -100,7 +100,7 @@ if __name__ == "__main__":
     flower = FloweringPlant("Rose", 25, "red")
     prize_flower = PrizeFlower("Sunflower", 30, "yellow", 10)
 
-    owners = ["Alice", "Bob"]
+    owners: list = ["Alice", "Bob"]
     gardens = GardenManager.create_garden_network(owners)
     alice, bob = gardens
 
