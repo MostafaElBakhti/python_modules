@@ -72,7 +72,7 @@ class GardenManager:
             self.total_growth = 0
 
     @classmethod
-    def create_garden_network(cls, owners):
+    def create_garden_network(cls, owners: list[str]) -> list:
         gardens = []
 
         for owner in owners:
@@ -100,7 +100,7 @@ if __name__ == "__main__":
     flower = FloweringPlant("Rose", 25, "red")
     prize_flower = PrizeFlower("Sunflower", 30, "yellow", 10)
 
-    owners: list = ["Alice", "Bob"]
+    owners: list[str] = ["Alice", "Bob"]
     gardens = GardenManager.create_garden_network(owners)
     alice, bob = gardens
 
