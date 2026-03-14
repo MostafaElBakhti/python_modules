@@ -3,7 +3,6 @@ class Plant:
         self.name: str = name
         self.height: int = height
         # self.age: int = age
-        self.test: str = name
 
     def grow(self) -> None:
         self.height += 1
