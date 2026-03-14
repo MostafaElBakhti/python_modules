@@ -2,7 +2,6 @@ class Plant:
     def __init__(self, name: str, height: int) -> None:
         self.name: str = name
         self.height: int = height
-        # self.age: int = age
 
     def grow(self) -> None:
         self.height += 1

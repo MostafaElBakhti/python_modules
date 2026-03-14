@@ -2,7 +2,6 @@ class SecurePlant:
     def __init__(self, name: str, height: int, age: int) -> None:
         self.name: str = name
         self.__height: int = 0
-        self.test = 5
         self.__age: int = 0
         print(f"Plant created: {name}")
         self.set_height(height)
