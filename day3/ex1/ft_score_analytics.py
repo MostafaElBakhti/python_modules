@@ -10,12 +10,14 @@ if len(sys.argv) == 1:
 else:
     scores = []
 
-    for i in range(1, len(sys.argv)):
+    i = 1
+    while i < len(sys.argv):
         try:
             score = int(sys.argv[i])
             scores = scores + [score]
         except ValueError:
             print(f"Invalid parameter: '{sys.argv[i]}'")
+        i += 1
     if len(scores) == 0:
         print(usage)
     else:
