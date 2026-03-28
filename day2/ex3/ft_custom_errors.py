@@ -22,7 +22,7 @@ def water_error() -> None:
 
 
 def test_all_errors() -> None:
-    print("=== Custom Garden Errors Demo ===")
+    print("=== Custom Garden Errors Demo ===\n")
 
     print("Testing PlantError...")
     try:
