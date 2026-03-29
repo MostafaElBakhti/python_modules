@@ -1,31 +1,32 @@
 import sys
 
+
 def main():
     inventory = {}
     print("=== Inventory System Analysis ===")
-    for arg in sys.argv[1:]:  ## 1: --> from arg 1 to end
+    for arg in sys.argv[1:]:
         if ":" not in arg:
             print(f"Error - invalid parameter '{arg}'")
         else:
-            item , quantity = arg.split(":")
+            item, quantity = arg.split(":")
             try:
                 quantity = int(quantity)
                 if item in inventory:
                     print(f"Redundant item '{item}' - discarding")
-                else: 
+                else:
                     inventory[item] = quantity
             except ValueError as error:
-                 print(f"Quantity error for '{item}': {error}")
+                print(f"Quantity error for '{item}': {error}")
     print(f"Got inventory: {inventory}")
     print(f"Item list: {list(inventory.keys())}")
-    print(f"Total quantity of the {len(inventory)} items: {sum(inventory.values())}")
+    length = len(inventory)
+    print(f"Total quantity of the {length} items: {sum(inventory.values())}")
 
     total_quantity = sum(inventory.values())
 
     for item in inventory:
         percentage = (inventory[item] / total_quantity) * 100
         print(f"Item {item} represents {round(percentage, 1)}%")
-    
     first_item = list(inventory.keys())[0]
     most_item = first_item
     least_item = first_item
@@ -36,10 +37,13 @@ def main():
         if inventory[item] < inventory[least_item]:
             least_item = item
 
-    print(f"Item most abundant: {most_item} with quantity {inventory[most_item]}")
-    print(f"Item least abundant: {least_item} with quantity {inventory[least_item]}")
+    print(f"Item most abundant: {most_item} "
+          f"with quantity {inventory[most_item]}")
+    print(f"Item least abundant: {least_item} "
+          f"with quantity {inventory[least_item]}")
     inventory["magic_item"] = 1
     print(f"Updated inventory: {inventory}")
+
 
 if __name__ == "__main__":
     main()

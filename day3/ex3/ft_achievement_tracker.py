@@ -17,10 +17,13 @@ achievements = [
     "Unstoppable",
     "Hidden Path Finder"
 ]
+
+
 def gen_player_achievements():
     count = random.randint(5, 9)
     picked = random.sample(achievements, count)
     return set(picked)
+
 
 Alice = gen_player_achievements()
 Bob = gen_player_achievements()
@@ -30,7 +33,6 @@ Dylan = gen_player_achievements()
 all_achievements = set(achievements)
 all_distinct_achievements = Alice.union(Bob, Charlie, Dylan)
 common_achievements = Alice.intersection(Bob, Charlie, Dylan)
-
 
 
 print("=== Achievement Tracker System ===")
