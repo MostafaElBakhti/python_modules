@@ -2,7 +2,7 @@ import sys
 
 
 def main():
-    inventory = {}
+    inventory: dict = {}
     print("=== Inventory System Analysis ===")
     for arg in sys.argv[1:]:
         if ":" not in arg:
@@ -27,9 +27,13 @@ def main():
     for item in inventory:
         percentage = (inventory[item] / total_quantity) * 100
         print(f"Item {item} represents {round(percentage, 1)}%")
-    first_item = list(inventory.keys())[0]
-    most_item = first_item
-    least_item = first_item
+    if inventory:
+        first_item = list(inventory.keys())[0]
+        most_item = first_item
+        least_item = first_item
+    else:
+        print("No valid inventory items!")
+        return
     for item in inventory:
         if inventory[item] > inventory[most_item]:
             most_item = item

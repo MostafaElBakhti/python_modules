@@ -46,22 +46,22 @@ def consume_event(events_list):
         yield removed
 
 
-print("=== Game Data Stream Processor ===")
+if __name__ == "__main__":
+    print("=== Game Data Stream Processor ===")
 
-g = gen_event()
-for i in range(1000):
-    pla, act = next(g)
-    print(f"Event {i}: Player {pla} did action {act}")
+    g = gen_event()
+    for i in range(1000):
+        pla, act = next(g)
+        print(f"Event {i}: Player {pla} did action {act}")
 
-events_list = []
-g2 = gen_event()
-for i in range(10):
-    events_list.append(next(g2))
+    events_list = []
+    g2 = gen_event()
+    for i in range(10):
+        events_list.append(next(g2))
 
+    g3 = consume_event(events_list)
+    print(f"Built list of 10 events: {events_list}")
 
-g3 = consume_event
-print(f"Built list of 10 events: {events_list}")
-
-for event in consume_event(events_list):
-    print(f"Got event from list: {event}")
-    print(f"Remains in list: {events_list}")
+    for event in consume_event(events_list):
+        print(f"Got event from list: {event}")
+        print(f"Remains in list: {events_list}")
