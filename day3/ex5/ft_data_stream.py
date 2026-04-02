@@ -1,4 +1,5 @@
 import random
+from typing import Generator, Tuple
 
 
 player: list = [
@@ -32,14 +33,14 @@ action: list = [
     ]
 
 
-def gen_event():
+def gen_event() -> Generator[Tuple[str, str], None, None]:
     while True:
         pla = random.choice(player)
         act = random.choice(action)
         yield (pla, act)
 
 
-def consume_event(events_list):
+def consume_event(events_list) -> Generator[Tuple[str, str], None, None]:
     while len(events_list) > 0:
         index = random.randint(0, len(events_list) - 1)
         removed = events_list.pop(index)

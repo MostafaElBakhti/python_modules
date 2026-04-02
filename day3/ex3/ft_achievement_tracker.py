@@ -19,7 +19,7 @@ achievements = [
 ]
 
 
-def gen_player_achievements():
+def gen_player_achievements() -> set:
     count = random.randint(5, 9)
     picked = random.sample(achievements, count)
     return set(picked)

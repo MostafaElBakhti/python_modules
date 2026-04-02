@@ -2,7 +2,7 @@ import sys
 
 
 def main():
-    inventory: dict = {}
+    inventory: dict[str, int] = {}
     print("=== Inventory System Analysis ===")
     for arg in sys.argv[1:]:
         if ":" not in arg:
