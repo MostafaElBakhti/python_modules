@@ -1,7 +1,8 @@
 import sys
 
+
 if len(sys.argv) != 2:
-    print("Usage: ft_archive_creation.py <file>")
+    print("Usage: ft_stream_management.py <file>")
 else:
     filename = sys.argv[1]
     print("=== Cyber Archives Recovery & Preservation ===")
@@ -26,15 +27,23 @@ else:
         print(new_content, end="")
         print("---")
 
-        new_filename = input("Enter new file name (or empty): ")
+        sys.stdout.write("Enter new file name (or empty): ")
+        sys.stdout.flush()
+        new_filename = sys.stdin.readline().strip("\n")
 
         if new_filename == "":
             print("Not saving data.")
         else:
             print(f"Saving data to '{new_filename}'")
-            new_file = open(new_filename, "w")
-            new_file.write(new_content)
-            new_file.close()
-            print(f"Data saved in file '{new_filename}'.")
+            try:
+                new_file = open(new_filename, "w")
+                new_file.write(new_content)
+                new_file.close()
+                print(f"Data saved in file '{new_filename}'.")
+            except Exception as error:
+                sys.stderr.write(f"[STDERR] Error opening file "
+                                 f"'{new_filename}': {error}\n")
+                print("Data not saved.")
     except Exception as error:
-        print(f"Error opening file '{filename}': {error}")
+        sys.stderr.write(f"[STDERR] Error opening file "
+                         f"'{filename}': {error}\n")
