@@ -6,7 +6,7 @@ def garden_operations(operation_number) -> None:
     elif operation_number == 2:
         open("non_existent_file.txt")
     elif operation_number == 3:
-        "test" + 5
+        "test" + "5"
 
 
 def test_error_types() -> None:
