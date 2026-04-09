@@ -1,6 +1,6 @@
+from typing import Any, List, Sequence
 from abc import ABC, abstractmethod
-from typing import Any, cast, Sequence
-
+import typing
 
 class DataProcessor(ABC):
     def __init__(self):
@@ -30,16 +30,16 @@ class NumericProcessor(DataProcessor):
         return False
 
     def ingest(self, data: int | float | Sequence[int | float]) -> None:
-        if not self.validate(data):
-            raise Exception("Improper numeric data")
+            if not self.validate(data):
+                raise Exception("Improper numeric data")
 
-        if isinstance(data, (int, float)):
-            self.storage.append((self.rank, str(data)))
-            self.rank += 1
-        else:
-            for item in data:
-                self.storage.append((self.rank, str(item)))
+            if isinstance(data, (int, float)):
+                self.storage.append((self.rank, str(data)))
                 self.rank += 1
+            else:
+                for item in data:
+                    self.storage.append((self.rank, str(item)))
+                    self.rank += 1
 
 
 class TextProcessor(DataProcessor):
@@ -96,62 +96,43 @@ class LogProcessor(DataProcessor):
                 self.storage.append((self.rank, str(item)))
                 self.rank += 1
 
+class DataStream:
+    def __init__(self) -> None:
+        self.processors: list[DataProcessor] = []
+        
+    def register_processor(self, proc: DataProcessor) -> None:
+        self.processors.append(proc)
 
-if __name__ == "__main__":
-    text = TextProcessor()
-    int_input = 42
-    list_input = ["Hello", "Nexus", "World"]
+    def process_stream(self, stream: list[typing.Any]) -> None:
+        for element in stream:
+            handled = False
+            for proc in self.processors:
+                if proc.validate(element):
+                    proc.ingest(element)
+                    handled = True
+                    break
+            if not handled:
+                print(f"DataStream error - Can't process element in stream: {element}")
+    def print_processors_stats(self) -> None:
+        print("== DataStream statistics ==")
+        
 
-    int_res = text.validate(int_input)
+ds = DataStream()
 
-    nemuric = NumericProcessor()
-    nemuric_int = nemuric.validate(42)
-    text_input = "hello"
-    text_input2 = "foo"
-    nemuric_text = nemuric.validate(text_input)
+num_proc = NumericProcessor()
+text_proc = TextProcessor()
+log_proc = LogProcessor()
 
-    print("=== Code Nexus - Data Processor ===\n")
-    print("Testing Numeric Processor...")
-    print(f"Trying to validate input '{int_input}': {nemuric_int}")
-    print(f"Trying to validate input '{text_input}': {nemuric_text}")
-    print(
-        f"Test invalid ingestion of string "
-        f"'{text_input2}' without prior validation:"
-    )
-    try:
-        nemuric.ingest(cast(Any, text_input2))
-    except Exception as error:
-        print(f"Got exception: {error}")
-    myList = [1, 2, 3, 4, 5]
-    nemuric.ingest(myList)
-    print(f"Processing data: {myList}")
-    for i in range(3):
-        rank, value = nemuric.output()
-        print(f"Numeric value {rank}: {value}")
+ds.register_processor(num_proc)
+ds.register_processor(text_proc)
+ds.register_processor(log_proc)
 
-    print("\n\nTesting Text Processor...")
-    print(f"Trying to validate input '{int_input}': {int_res}")
-    print(f"Processing data: {list_input}")
-    text.ingest(list_input)
 
-    rank, value = text.output()
-    print("Extracting 1 value...")
-    print(f"Text value {rank}: {value}")
+stream = [
+    "Hello",
+    42,
+    {"log_level": "INFO", "log_message": "Test"},
+    [1,2,"oops"]
+]
 
-    log = LogProcessor()
-    log_input = log.validate(text_input)
-    print("\nTesting Log Processor...")
-    print(f"Trying to validate input '{text_input}': {log_input}")
-
-    log_data = [
-        {"log_level": "NOTICE", "log_message": "Connection to server"},
-        {"log_level": "ERROR", "log_message": "Unauthorized access!!"},
-    ]
-    print(f"Processing data: {log_data}")
-    log.ingest(log_data)
-    print(f"Extracting {len(log_data)} values...")
-    # for i in range(len(log_data)):
-    #     rank, value = log.output()
-        # print(f"Log entry {rank}: {': '.join(value.values())}")
-    txt = TextProcessor()
-    txt.ingest(42)
+ds.process_stream(stream)
