@@ -16,9 +16,12 @@ class DataProcessor(ABC):
         pass
 
     def output(self) -> tuple[int, str]:
-        if not self.storage:
-            raise Exception("No data to output")
-        return self.storage.pop(0)
+        try:
+            if not self.storage:
+                raise Exception("No data to output")
+            return self.storage.pop(0)
+        except Exception as error:
+            print(f"{error}")
 
 
 class NumericProcessor(DataProcessor):
@@ -30,16 +33,19 @@ class NumericProcessor(DataProcessor):
         return False
 
     def ingest(self, data: int | float | Sequence[int | float]) -> None:
-        if not self.validate(data):
-            raise Exception("Improper numeric data")
+        try:
+            if not self.validate(data):
+                raise Exception("Improper numeric data")
 
-        if isinstance(data, (int, float)):
-            self.storage.append((self.rank, str(data)))
-            self.rank += 1
-        else:
-            for item in data:
-                self.storage.append((self.rank, str(item)))
+            if isinstance(data, (int, float)):
+                self.storage.append((self.rank, str(data)))
                 self.rank += 1
+            else:
+                for item in data:
+                    self.storage.append((self.rank, str(item)))
+                    self.rank += 1
+        except Exception as error:
+            print(f"{error}")
 
 
 class TextProcessor(DataProcessor):
@@ -52,16 +58,19 @@ class TextProcessor(DataProcessor):
         return False
 
     def ingest(self, data: str | list[str]) -> None:
-        if not self.validate(data):
-            raise Exception("mproper text data")
+        try:
+            if not self.validate(data):
+                raise Exception("mproper text data")
 
-        if isinstance(data, str):
-            self.storage.append((self.rank, data))
-            self.rank += 1
-        else:
-            for item in data:
-                self.storage.append((self.rank, item))
+            if isinstance(data, str):
+                self.storage.append((self.rank, data))
                 self.rank += 1
+            else:
+                for item in data:
+                    self.storage.append((self.rank, item))
+                    self.rank += 1
+        except Exception as error:
+            print(f"{error}")
 
 
 class LogProcessor(DataProcessor):
@@ -85,16 +94,19 @@ class LogProcessor(DataProcessor):
         return False
 
     def ingest(self, data: dict[str, str] | list[dict[str, str]]) -> None:
-        if not self.validate(data):
-            raise Exception("Improper log data")
+        try:
+            if not self.validate(data):
+                raise Exception("Improper log data")
 
-        if isinstance(data, dict):
-            self.storage.append((self.rank, str(data)))
-            self.rank += 1
-        else:
-            for item in data:
-                self.storage.append((self.rank, str(item)))
+            if isinstance(data, dict):
+                self.storage.append((self.rank, str(data)))
                 self.rank += 1
+            else:
+                for item in data:
+                    self.storage.append((self.rank, str(item)))
+                    self.rank += 1
+        except Exception as error:
+            print(f"{error}")
 
 
 if __name__ == "__main__":
@@ -118,10 +130,10 @@ if __name__ == "__main__":
         f"Test invalid ingestion of string "
         f"'{text_input2}' without prior validation:"
     )
-    try:
-        nemuric.ingest(cast(Any, text_input2))
-    except Exception as error:
-        print(f"Got exception: {error}")
+    # try:
+    nemuric.ingest(cast(Any, text_input2))
+    # except Exception as error:
+        # print(f"Got exception: {error}")
     myList = [1, 2, 3, 4, 5]
     nemuric.ingest(myList)
     print(f"Processing data: {myList}")
