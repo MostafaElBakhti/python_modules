@@ -1,10 +1,10 @@
 from abc import ABC, abstractmethod
-from typing import Any
+from typing import Any, cast, Sequence
 
 
 class DataProcessor(ABC):
     def __init__(self):
-        self.storage = []
+        self.storage: list[tuple[int, str]] = []
         self.rank = 0
 
     @abstractmethod
@@ -22,19 +22,18 @@ class DataProcessor(ABC):
 
 
 class NumericProcessor(DataProcessor):
-    
     def validate(self, data: Any) -> bool:
-        if type(data) in (int, float):
+        if isinstance(data, (int, float)):
             return True
-        if isinstance(data,list):
-            return all(type(item) in (int, float) for item in data)
+        if isinstance(data, list):
+            return all(isinstance(item, (int, float)) for item in data)
         return False
 
-    def ingest(self, data: int | float | list[int|float]) -> None:
+    def ingest(self, data: int | float | Sequence[int | float]) -> None:
         if not self.validate(data):
             raise Exception("Improper numeric data")
-        
-        if type(data) in (int, float):
+
+        if isinstance(data, (int, float)):
             self.storage.append((self.rank, str(data)))
             self.rank += 1
         else:
@@ -42,23 +41,20 @@ class NumericProcessor(DataProcessor):
                 self.storage.append((self.rank, str(item)))
                 self.rank += 1
 
-        
-
 
 class TextProcessor(DataProcessor):
-    
 
     def validate(self, data: Any) -> bool:
-        if isinstance(data ,str):
+        if isinstance(data, str):
             return True
         if isinstance(data, list):
             return all(isinstance(item, str) for item in data)
         return False
 
     def ingest(self, data: str | list[str]) -> None:
-        if not self.validate(data) :
-            raise Exception("no data")
-        
+        if not self.validate(data):
+            raise Exception("mproper text data")
+
         if isinstance(data, str):
             self.storage.append((self.rank, data))
             self.rank += 1
@@ -69,61 +65,68 @@ class TextProcessor(DataProcessor):
 
 
 class LogProcessor(DataProcessor):
-    
+
     def validate(self, data: Any) -> bool:
         if isinstance(data, dict):
-            return all(isinstance(k,str) and isinstance(v, str) for k, v in data.items())
+            return all(
+                isinstance(k, str) and isinstance(v, str)
+                for k, v in data.items()
+            )
         if isinstance(data, list):
             return all(
-                isinstance(item, dict) and
-                all(isinstance(k, str) and isinstance(v, str) for k, v in item.items())
+                isinstance(item, dict)
+                and all(
+                    isinstance(k, str) and isinstance(v, str)
+                    for k, v in item.items()
+                )
                 for item in data
             )
-        
+
         return False
 
-# tp = TextProcessor()
+    def ingest(self, data: dict[str, str] | list[dict[str, str]]) -> None:
+        if not self.validate(data):
+            raise Exception("Improper log data")
 
-# print(tp.validate("Hello"))
-# print(tp.validate(22))
-
-# tp.ingest(["Hello", "Nexus", "World"])
-
-# print(tp.output())
-# print(tp.output())
-# https://chatgpt.com/c/69d2d499-562c-8333-a829-88c31f3dcb4b
-
+        if isinstance(data, dict):
+            self.storage.append((self.rank, str(data)))
+            self.rank += 1
+        else:
+            for item in data:
+                self.storage.append((self.rank, str(item)))
+                self.rank += 1
 
 
 if __name__ == "__main__":
     text = TextProcessor()
     int_input = 42
-    list_input = ['Hello', 'Nexus', 'World']
+    list_input = ["Hello", "Nexus", "World"]
 
     int_res = text.validate(int_input)
-    list_res = text.validate(list_input)
-    text.ingest(list_input)
 
-    Nemuric = NumericProcessor()
-    nemuric_int = Nemuric.validate(42)
-    text_input = 'hello'
-    text_input2 = 'foo'
-    nemuric_text = Nemuric.validate(text_input)
-    
+    nemuric = NumericProcessor()
+    nemuric_int = nemuric.validate(42)
+    text_input = "hello"
+    text_input2 = "foo"
+    nemuric_text = nemuric.validate(text_input)
+
     print("=== Code Nexus - Data Processor ===\n")
     print("Testing Numeric Processor...")
     print(f"Trying to validate input '{int_input}': {nemuric_int}")
     print(f"Trying to validate input '{text_input}': {nemuric_text}")
-    print(f"Test invalid ingestion of string '{text_input2}' without prior validation:")
+    print(
+        f"Test invalid ingestion of string "
+        f"'{text_input2}' without prior validation:"
+    )
     try:
-        Nemuric.ingest(text_input2)
+        nemuric.ingest(cast(Any, text_input2))
     except Exception as error:
         print(f"Got exception: {error}")
     myList = [1, 2, 3, 4, 5]
-    Nemuric.ingest(myList)
+    nemuric.ingest(myList)
     print(f"Processing data: {myList}")
     for i in range(3):
-        rank, value = Nemuric.output()
+        rank, value = nemuric.output()
         print(f"Numeric value {rank}: {value}")
 
     print("\n\nTesting Text Processor...")
@@ -134,3 +137,19 @@ if __name__ == "__main__":
     rank, value = text.output()
     print("Extracting 1 value...")
     print(f"Text value {rank}: {value}")
+
+    log = LogProcessor()
+    log_input = log.validate(text_input)
+    print("\nTesting Log Processor...")
+    print(f"Trying to validate input '{text_input}': {log_input}")
+
+    log_data = [
+        {"log_level": "NOTICE", "log_message": "Connection to server"},
+        {"log_level": "ERROR", "log_message": "Unauthorized access!!"},
+    ]
+    print(f"Processing data: {log_data}")
+    log.ingest(log_data)
+    print(f"Extracting {len(log_data)} values...")
+    for i in range(len(log_data)):
+        rank, value = log.output()
+        print(f"Log entry {rank}: {': '.join(value.values())}")
