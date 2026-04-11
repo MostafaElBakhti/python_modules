@@ -1,1 +1,0 @@
-f"remaining {len(proc.storage)} on processor"

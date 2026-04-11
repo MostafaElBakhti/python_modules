@@ -158,7 +158,7 @@ if __name__ == "__main__":
 
     print("\nRegistering Numeric Processor")
     num_proc = NumericProcessor()
-    ds.register_processor(num_proc)
+    ds.register_processor(num_proc) 
 
     stream = [
         "Hello world",
