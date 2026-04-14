@@ -104,7 +104,6 @@ if __name__ == "__main__":
 
     int_res = text.validate(int_input)
 
-
     nemuric = NumericProcessor()
     nemuric_int = nemuric.validate(42)
     text_input = "hello"

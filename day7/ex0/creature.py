@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 
 class Creature(ABC):
-    def __init__(self,name,type):
+    def __init__(self, name, type):
         self.name = name
         self.type = type
 
@@ -11,34 +11,4 @@ class Creature(ABC):
         pass
 
     def describe(self) -> str:
-        return(f"{self.name} is a {self.type} type Creature")
-
-
-class Flameling(Creature):
-    def __init__(self):
-        super().__init__("Flameling", "Fire")
-
-    def attack(self) -> str:
-        return "Flameling uses Ember!"
-    
-
-class Pyrodon(Creature):
-    def __init__(self):
-        super().__init__("Pyrodon", "Fire/Flying")
-
-    def attack(self):
-        return "Pyrodon uses Flamethrower!"
-    
-class Aquabub(Creature):
-    def __init__(self):
-        super().__init__("Aquabubble", "Water")
-
-    def attack(self) -> str:
-        return "Aquabubble uses Water Gun!"
-
-class Torragon(Creature):
-    def __init__(self):
-        super().__init__("Torragon", "Water")
-
-    def attack(self) -> str:
-        return "Torragon uses Hydro Pump!"
+        return (f"{self.name} is a {self.type} type Creature")
