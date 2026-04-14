@@ -14,10 +14,31 @@ class Creature(ABC):
         return(f"{self.name} is a {self.type} type Creature")
 
 
+class Flameling(Creature):
+    def __init__(self):
+        super().__init__("Flameling", "Fire")
 
+    def attack(self) -> str:
+        return "Flameling uses Ember!"
+    
 
+class Pyrodon(Creature):
+    def __init__(self):
+        super().__init__("Pyrodon", "Fire/Flying")
 
+    def attack(self):
+        return "Pyrodon uses Flamethrower!"
+    
+class Aquabub(Creature):
+    def __init__(self):
+        super().__init__("Aquabubble", "Water")
 
-# test = Flameling("Flameling", "Fire")
-# test.describe()
-# print(test.attack())
+    def attack(self) -> str:
+        return "Aquabubble uses Water Gun!"
+
+class Torragon(Creature):
+    def __init__(self):
+        super().__init__("Torragon", "Water")
+
+    def attack(self) -> str:
+        return "Torragon uses Hydro Pump!"

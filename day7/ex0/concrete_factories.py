@@ -1,4 +1,4 @@
-from .factory import CreatureFactory
+from .CreatureFactory import CreatureFactory
 from .flame import Flameling, Pyrodon
 from .aqua import Aquabub, Torragon
 

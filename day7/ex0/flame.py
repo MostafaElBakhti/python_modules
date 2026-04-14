@@ -1,16 +1,30 @@
-from .creature import Creature
+# from .creature import Creature
 
-class Flameling(Creature):
-    def __init__(self):
-        super().__init__("Flameling", "Fire")
+# class Flameling(Creature):
+#     def __init__(self):
+#         super().__init__("Flameling", "Fire")
 
-    def attack(self) -> str:
-        return "Flameling uses Ember!"
+#     def attack(self) -> str:
+#         return "Flameling uses Ember!"
     
 
-class Pyrodon(Creature):
-    def __init__(self):
-        super().__init__("Pyrodon", "Fire/Flying")
+# class Pyrodon(Creature):
+#     def __init__(self):
+#         super().__init__("Pyrodon", "Fire/Flying")
 
-    def attack(self):
-        return "Pyrodon uses Flamethrower!"
+#     def attack(self):
+#         return "Pyrodon uses Flamethrower!"
+    
+# class Aquabub(Creature):
+#     def __init__(self):
+#         super().__init__("Aquabubble", "Water")
+
+#     def attack(self) -> str:
+#         return "Aquabubble uses Water Gun!"
+
+# class Torragon(Creature):
+#     def __init__(self):
+#         super().__init__("Torragon", "Water")
+
+#     def attack(self) -> str:
+#         return "Torragon uses Hydro Pump!"

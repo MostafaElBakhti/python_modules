@@ -10,3 +10,10 @@ class CreatureFactory(ABC):
     @abstractmethod
     def create_evolved(self) -> Creature:
         pass
+
+class FlameFactory(CreatureFactory):
+    pass
+
+
+class AquaFactory(CreatureFactory):
+    pass
