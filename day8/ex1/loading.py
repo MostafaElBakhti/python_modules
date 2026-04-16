@@ -25,18 +25,32 @@ if not all_ok:
     print("Install with:")
     print("pip install -r requirements.txt")
     print("or")
+    for name in missing:
+        print(f"- {name}")
     print("poetry install")
     exit()
 
-np, _ = check_package("numpy")
-data = np.random.rand(1)
-print(data)
 
-# packages = ["math", "numpy", "something_fake"]
+def main():
+    np, _ = check_package("numpy")
+    pd, _ = check_package("pandas")
 
-# for pkg in packages:
-#     module, version = check_package(pkg)
-#     if module:
-#         print(f"[OK] {pkg} ({version})")
-#     else:
-#         print(f"[MISSING] {pkg} ")
+    data = np.random.rand(1000)
+
+    print("Analyzing Matrix data...")
+    print(f"Processing {len(data)} data points...")
+
+    df = pd.DataFrame(data, columns=["values"])
+
+    plt = importlib.import_module("matplotlib.pyplot")
+
+    print("Generating visualization...")
+    plt.plot(df["values"])
+    plt.title("Matrix Data")
+    plt.savefig("matrix_analysis.png")
+
+    print("Analysis complete!")
+    print("Results saved to: matrix_analysis.png")
+
+
+main()
