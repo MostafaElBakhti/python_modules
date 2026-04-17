@@ -1,4 +1,5 @@
 import importlib
+import sys
 
 
 def check_package(name):
@@ -10,39 +11,55 @@ def check_package(name):
         return None, None
 
 
-required = ["pandas", "numpy", "matplotlib"]
-missing = []
-all_ok = True
+def check_dependencies():
+    print("LOADING STATUS: Loading programs...")
+    print("Checking dependencies:")
 
-for pkg in required:
-    module, _ = check_package(pkg)
-    if not module:
-        all_ok = False
-        missing.append(pkg)
+    descriptions = {
+        "pandas": "Data manipulation ready",
+        "numpy": "Numerical computation ready",
+        "matplotlib": "Visualization ready",
+        "requests": "Network access ready",
+    }
 
-if not all_ok:
-    print("\nMissing dependencies!")
-    print("Install with:")
-    print("pip install -r requirements.txt")
-    print("or")
-    for name in missing:
-        print(f"- {name}")
-    print("poetry install")
-    exit()
+    required = ["pandas", "numpy", "matplotlib"]
+    optional = ["requests"]
+
+    missing = []
+
+    for pkg in required:
+        module, version = check_package(pkg)
+        if module:
+            print(f"[OK] {pkg} ({version}) - {descriptions[pkg]}")
+        else:
+            print(f"[MISSING] {pkg}")
+            missing.append(pkg)
+
+    for pkg in optional:
+        module, version = check_package(pkg)
+        if module:
+            print(f"[OK] {pkg} ({version}) - {descriptions[pkg]}")
+
+    if missing:
+        print("\nMissing dependencies!")
+        print("Install with:")
+        print("pip install -r requirements.txt")
+        print("or")
+        print("poetry install")
+        sys.exit()
 
 
 def main():
     np, _ = check_package("numpy")
     pd, _ = check_package("pandas")
+    plt = importlib.import_module("matplotlib.pyplot")
 
     data = np.random.rand(1000)
 
-    print("Analyzing Matrix data...")
+    print("\nAnalyzing Matrix data...")
     print(f"Processing {len(data)} data points...")
 
     df = pd.DataFrame(data, columns=["values"])
-
-    plt = importlib.import_module("matplotlib.pyplot")
 
     print("Generating visualization...")
     plt.plot(df["values"])
@@ -53,4 +70,6 @@ def main():
     print("Results saved to: matrix_analysis.png")
 
 
-main()
+if __name__ == "__main__":
+    check_dependencies()
+    main()
