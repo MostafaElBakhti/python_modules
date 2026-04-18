@@ -19,7 +19,6 @@ def main() -> None:
     print("Space Station Data Validation")
     print("=" * 40)
 
-    # Valid station
     station = SpaceStation(
         station_id="ISS001",
         name="International Space Station",
@@ -41,7 +40,6 @@ def main() -> None:
 
     print("=" * 40)
 
-    # Invalid station - crew_size > 20
     try:
         SpaceStation(
             station_id="BAD001",

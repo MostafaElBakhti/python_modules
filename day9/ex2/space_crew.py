@@ -23,6 +23,16 @@ class CrewMember(BaseModel):
     is_active: bool = True
 
 
+test = CrewMember(
+    member_id="CM001",
+    name="Sarah Connor",
+    rank=Rank.commander,
+    age=42,
+    specialization="Mission Command",
+    years_experience=15,
+)
+
+
 class SpaceMission(BaseModel):
     mission_id: str = Field(..., min_length=5, max_length=15)
     mission_name: str = Field(..., min_length=3, max_length=100)
@@ -72,7 +82,6 @@ def main() -> None:
     print("Space Mission Crew Validation")
     print("=" * 41)
 
-    # Valid mission
     crew = [
         CrewMember(
             member_id="CM001",
@@ -126,7 +135,6 @@ def main() -> None:
 
     print("=" * 41)
 
-    # Invalid mission - no commander or captain
     try:
         SpaceMission(
             mission_id="M2024_BAD",
