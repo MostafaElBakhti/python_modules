@@ -1,6 +1,6 @@
 from datetime import datetime
 from enum import Enum
-from typing import List
+from typing import List, Self
 
 from pydantic import BaseModel, Field, ValidationError, model_validator
 
@@ -23,16 +23,6 @@ class CrewMember(BaseModel):
     is_active: bool = True
 
 
-test = CrewMember(
-    member_id="CM001",
-    name="Sarah Connor",
-    rank=Rank.commander,
-    age=42,
-    specialization="Mission Command",
-    years_experience=15,
-)
-
-
 class SpaceMission(BaseModel):
     mission_id: str = Field(..., min_length=5, max_length=15)
     mission_name: str = Field(..., min_length=3, max_length=100)
@@ -44,35 +34,40 @@ class SpaceMission(BaseModel):
     budget_millions: float = Field(..., ge=1.0, le=10000.0)
 
     @model_validator(mode="after")
-    def validate_mission_rules(self) -> "SpaceMission":
+    def validate_mission_rules(self) -> Self:
         if not self.mission_id.startswith("M"):
             raise ValueError('Mission ID must start with "M"')
 
-        has_leader = any(
-            m.rank in (Rank.commander, Rank.captain)
-            for m in self.crew
-        )
+        has_leader = False
+        for member in self.crew:
+            if (
+                member.rank == Rank.commander
+                or member.rank == Rank.captain
+            ):
+                has_leader = True
+                break
         if not has_leader:
             raise ValueError(
                 "Mission must have at least one Commander or Captain"
             )
 
-        inactive = [m for m in self.crew if not m.is_active]
-        if inactive:
-            raise ValueError(
-                f"All crew members must be active. "
-                f"Inactive: {[m.name for m in inactive]}"
-            )
+        for member in self.crew:
+            if not member.is_active:
+                raise ValueError(
+                    f"All crew members must be active. "
+                    f"{member.name} is inactive."
+                )
 
         if self.duration_days > 365:
-            experienced = sum(
-                1 for m in self.crew if m.years_experience >= 5
-            )
-            ratio = experienced / len(self.crew)
+            experienced_count = 0
+            for member in self.crew:
+                if member.years_experience >= 5:
+                    experienced_count += 1
+            ratio = experienced_count / len(self.crew)
             if ratio < 0.5:
                 raise ValueError(
-                    "Long missions (> 365 days) need 50% experienced crew "
-                    "(5+ years)"
+                    "Long missions (> 365 days) need 50% experienced "
+                    "crew (5+ years)"
                 )
 
         return self
