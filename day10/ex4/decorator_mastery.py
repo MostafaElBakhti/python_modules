@@ -4,8 +4,8 @@ from collections.abc import Callable
 
 
 def spell_timer(func: Callable) -> Callable:
-    # @functools.wraps(func)
-    def wrapper(*args, **kwargs):
+    @functools.wraps(func)
+    def wrapper(*args: object, **kwargs: object) -> object:
         print(f"Casting {func.__name__}...")
         start = time.time()
         result = func(*args, **kwargs)
@@ -18,14 +18,9 @@ def spell_timer(func: Callable) -> Callable:
 def power_validator(min_power: int) -> Callable:
     def decorator(func: Callable) -> Callable:
         @functools.wraps(func)
-        def wrapper(*args, **kwargs):
-            # If first arg is not int, it's likely 'self' — find power in kwargs or last arg
-            if isinstance(args[0], int):
-                power = args[0]
-            else:
-                power = kwargs.get('power', args[-1])
+        def wrapper(power: int, *args: object, **kwargs: object) -> object:
             if power >= min_power:
-                return func(*args, **kwargs)
+                return func(power, *args, **kwargs)
             return "Insufficient power for this spell"
         return wrapper
     return decorator
@@ -34,7 +29,7 @@ def power_validator(min_power: int) -> Callable:
 def retry_spell(max_attempts: int) -> Callable:
     def decorator(func: Callable) -> Callable:
         @functools.wraps(func)
-        def wrapper(*args, **kwargs):
+        def wrapper(*args: object, **kwargs: object) -> object:
             for attempt in range(1, max_attempts + 1):
                 try:
                     return func(*args, **kwargs)
@@ -53,9 +48,10 @@ class MageGuild:
     def validate_mage_name(name: str) -> bool:
         return len(name) >= 3 and all(c.isalpha() or c == ' ' for c in name)
 
-    @power_validator(min_power=10)
     def cast_spell(self, spell_name: str, power: int) -> str:
-        return f"Successfully cast {spell_name} with {power} power"
+        if power >= 10:
+            return f"Successfully cast {spell_name} with {power} power"
+        return "Insufficient power for this spell"
 
 
 if __name__ == "__main__":
@@ -69,21 +65,24 @@ if __name__ == "__main__":
     result = fireball_cast()
     print(f"Result: {result}")
 
+    print("\nTesting power validator...")
+
+    @power_validator(min_power=50)
+    def launch_spell(power: int, name: str) -> str:
+        return f"Launched {name} with {power} power"
+
+    print(launch_spell(100, "Fireball"))
+    print(launch_spell(10, "Fireball"))
+
     print("\nTesting retrying spell...")
 
     attempt_count = [0]
 
     @retry_spell(max_attempts=3)
-    def unstable_spell() -> str:
-        attempt_count[0] += 1
-        if attempt_count[0] < 3:
-            raise RuntimeError("Spell unstable!")
-        return "Waaaaaaagh spelled !"
+    def always_fails() -> str:
+        raise RuntimeError("always fails")
 
-    result = retry_spell(max_attempts=3)(
-        lambda: (_ for _ in ()).throw(RuntimeError("always fails"))
-    )()
-    print(result)
+    print(always_fails())
 
     attempt_count[0] = 0
 

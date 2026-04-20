@@ -22,13 +22,19 @@ def spell_reducer(spells: list[int], operation: str) -> int:
 
 
 def partial_enchanter(base_enchantment: Callable) -> dict[str, Callable]:
-    fire_enchant = functools.partial(base_enchantment, power=50, element='fire')
-    water_enchant = functools.partial(base_enchantment, power=50, element='water')
-    earth_enchant = functools.partial(base_enchantment, power=50, element='earth')
+    fire_enchant = functools.partial(
+        base_enchantment, power=50, element='fire'
+    )
+    water_enchant = functools.partial(
+        base_enchantment, power=50, element='water'
+    )
+    earth_enchant = functools.partial(
+        base_enchantment, power=50, element='earth'
+    )
     return {
-        'fire': fire_enchant,
-        'water': water_enchant,
-        'earth': earth_enchant,
+        'fire_enchant': fire_enchant,
+        'water_enchant': water_enchant,
+        'earth_enchant': earth_enchant,
     }
 
 
@@ -71,13 +77,16 @@ if __name__ == "__main__":
     print(f"Empty: {spell_reducer([], 'add')}")
 
     print("\nTesting partial enchanter...")
+
     def base_enchant(power: int, element: str, target: str) -> str:
-        return f"{element.capitalize()} enchantment (power {power}) on {target}"
+        enchant = element.capitalize()
+        return f"{enchant} enchantment (power {power}) on {target}"
 
     variants = partial_enchanter(base_enchant)
-    print(variants['fire'](target='Sword'))
-    print(variants['water'](target='Shield'))
-    print(variants['earth'](target='Boots'))
+    print(variants['fire_enchant'](target='Sword'))
+    print(variants['water_enchant'](target='Shield'))
+    print(variants['earth_enchant'](target='Boots'))
+    print(type(variants['fire_enchant']))
 
     print("\nTesting memoized fibonacci...")
     print(f"Fib(0): {memoized_fibonacci(0)}")

@@ -44,11 +44,9 @@ if __name__ == "__main__":
 
     print("\nTesting power amplifier...")
     mega_fireball = power_amplifier(fireball, 3)
-    original = fireball("Dragon", 10)
-    amplified = mega_fireball("Dragon", 10)
-    print(f"Original: 10, Amplified: 30")
-    print(f"  -> {original}")
-    print(f"  -> {amplified}")
+    print("Original: 10, Amplified: 30")
+    print(f"  -> {fireball('Dragon', 10)}")
+    print(f"  -> {mega_fireball('Dragon', 10)}")
 
     print("\nTesting conditional caster...")
     powerful_only = conditional_caster(
